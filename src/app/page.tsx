@@ -35,21 +35,26 @@ export default function Home() {
   // Initial load logic: Check user and fetch conversions
   useEffect(() => {
     const initData = async () => {
-      const { data: { user }, error } = await supabase.auth.getUser();
-      if (!user || error) {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (!user || error) {
+          router.replace('/login');
+          return;
+        }
+        setUser(user);
+
+        // Load conversations
+        const { data: convs } = await supabase
+          .from('conversations')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (convs) {
+          setConversations(convs);
+        }
+      } catch (err) {
+        console.error("Init Error:", err);
         router.replace('/login');
-        return;
-      }
-      setUser(user);
-
-      // Load conversations
-      const { data: convs } = await supabase
-        .from('conversations')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (convs) {
-        setConversations(convs);
       }
     };
     initData();
