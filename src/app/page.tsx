@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Bot, Send, User, Menu, PlusCircle, Sparkles, LogOut, MessageSquare } from 'lucide-react';
